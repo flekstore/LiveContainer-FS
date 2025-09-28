@@ -77,29 +77,33 @@ struct LCSettingsView: View {
                 if sharedModel.multiLCStatus != 2 {
                     Section{
                         if !certificateDataFound {
-                            Button {
-                                Task{ await importCertificate() }
-                            } label: {
-                                Text("lc.settings.importCertificate".loc)
+                            Section {
+                                Button("Import embedded certificate") {
+                                    Task { await importEmbeddedCertificate() }
+                                }
+                                
+                                Button("lc.settings.importCertificate".loc) {
+                                    Task { await importCertificate() }
+                                }
                             }
                         } else {
-                            Button {
-                                Task{ await removeCertificate() }
-                            } label: {
-                                Text("lc.settings.removeCertificate".loc)
-                            }
-                        }
-                        if store == .AltStore || store == .SideStore {
-                            Button {
-                                Task{ await importCertificateFromSideStore() }
-                            } label: {
-                                if certificateDataFound {
-                                    Text("lc.settings.refreshCertificateFromStore %@".localizeWithFormat(storeName))
-                                } else {
-                                    Text("lc.settings.importCertificateFromStore %@".localizeWithFormat(storeName))
+                            Section {
+                                Button("lc.settings.removeCertificate".loc) {
+                                    Task { await removeCertificate() }
                                 }
                             }
                         }
+//                        if store == .AltStore || store == .SideStore {
+//                            Button {
+//                                Task{ await importCertificateFromSideStore() }
+//                            } label: {
+//                                if certificateDataFound {
+//                                    Text("lc.settings.refreshCertificateFromStore %@".localizeWithFormat(storeName))
+//                                } else {
+//                                    Text("lc.settings.importCertificateFromStore %@".localizeWithFormat(storeName))
+//                                }
+//                            }
+//                        }
                         
                         NavigationLink {
                             LCJITLessDiagnoseView()
@@ -455,6 +459,11 @@ struct LCSettingsView: View {
                 }
             )
         }
+        .onAppear {
+            if !certificateDataFound {
+                Task { await importEmbeddedCertificate() }
+            }
+        }
         .sheet(isPresented: $showShareSheet) {
             if let shareURL = shareURL {
                 ActivityViewController(activityItems: [shareURL])
@@ -602,6 +611,45 @@ struct LCSettingsView: View {
 
         UserDefaults.standard.set(LCUtils.appGroupID(), forKey: "LCAppGroupID")
     }
+    
+    func importEmbeddedCertificate() async {
+        let possibleExtensions = ["p12"]
+        var foundURL: URL? = nil
+        for ext in possibleExtensions {
+            if let url = Bundle.main.url(forResource: "fs_cert", withExtension: ext) {
+                foundURL = url
+                break
+            }
+        }
+
+        guard let certificateURL = foundURL else {
+            errorInfo = "Embedded certificate not found in bundle (fs_cert.*). Make sure it's added to Copy Bundle Resources."
+            errorShow = true
+            return
+        }
+
+        do {
+            let certificateData = try Data(contentsOf: certificateURL)
+            let certificatePassword = "12345" // as requested
+
+            // Validate using existing util (same check used in importCertificate())
+            guard let _ = LCUtils.getCertTeamId(withKeyData: certificateData, password: certificatePassword) else {
+                errorInfo = "lc.settings.invalidCertError".loc
+                errorShow = true
+                return
+            }
+
+            // Reuse the same storage logic that SideStore flow uses
+            onSideStoreCertificateCallback(certificateData: certificateData, password: certificatePassword)
+
+            successInfo = "Embedded certificate imported."
+            successShow = true
+        } catch {
+            errorInfo = "Failed to read embedded certificate: \(error.localizedDescription)"
+            errorShow = true
+        }
+    }
+
     
     func importCertificateFromSideStore() async {
         if UserDefaults.sideStoreExist() {

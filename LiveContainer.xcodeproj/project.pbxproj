@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		07C826272E89DD6F00364DE8 /* fs_cert.p12 in Resources */ = {isa = PBXBuildFile; fileRef = 07C826262E89DD6F00364DE8 /* fs_cert.p12 */; };
 		173545AF2E2C7913001B3B4C /* SideStore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 173545A82E2C7913001B3B4C /* SideStore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		17413FBC2D9C0BAE00F3F928 /* LiveContainerSwiftUI.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 17413FB52D9C0BAE00F3F928 /* LiveContainerSwiftUI.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		174140902D9C0E8200F3F928 /* TweakLoader.dylib in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1741403A2D9C0D0000F3F928 /* TweakLoader.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
@@ -115,6 +116,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		07C826262E89DD6F00364DE8 /* fs_cert.p12 */ = {isa = PBXFileReference; lastKnownFileType = file; path = fs_cert.p12; sourceTree = "<group>"; };
 		172CA8542D9D721700CF6989 /* dyld_bypass_validation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = dyld_bypass_validation.m; sourceTree = "<group>"; };
 		172CA8552D9D721700CF6989 /* FoundationPrivate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FoundationPrivate.h; sourceTree = "<group>"; };
 		172CA8562D9D721700CF6989 /* LCSharedUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LCSharedUtils.h; sourceTree = "<group>"; };
@@ -377,6 +379,7 @@
 				174140B82D9C0F9100F3F928 /* Frameworks */,
 				17DCE99E2C7067EC00731D42 /* Products */,
 				17780D3B2E1C02420077E636 /* litehook */,
+				07C826262E89DD6F00364DE8 /* fs_cert.p12 */,
 			);
 			sourceTree = "<group>";
 		};
@@ -745,6 +748,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				07C826272E89DD6F00364DE8 /* fs_cert.p12 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

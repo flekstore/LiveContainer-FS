@@ -12,6 +12,8 @@ struct LCTabView: View {
     @Binding var appDataFolderNames: [String]
     @Binding var tweakFolderNames: [String]
     
+    @State private var selectedTab: Int = 0
+    
     @State var errorShow = false
     @State var errorInfo = ""
     
@@ -48,17 +50,20 @@ struct LCTabView: View {
                         .tabItem {
                             Label("lc.tabView.apps".loc, systemImage: "square.stack.3d.up.fill")
                         }
+                        .tag(0)
                     if DataManager.shared.model.multiLCStatus != 2 {
                         LCTweaksView(tweakFolders: $tweakFolderNames)
                             .tabItem{
                                 Label("lc.tabView.tweaks".loc, systemImage: "wrench.and.screwdriver")
                             }
+                            .tag(1)
                     }
                     
                     LCSettingsView(appDataFolderNames: $appDataFolderNames)
                         .tabItem {
                             Label("lc.tabView.settings".loc, systemImage: "gearshape.fill")
                         }
+                        .tag(2)
                 }
             }
         }
@@ -71,7 +76,12 @@ struct LCTabView: View {
         } message: {
             Text(errorInfo)
         }
+        
         .onAppear() {
+            if !UserDefaults.standard.bool(forKey: "DidOpenSettingsOnce") {
+                selectedTab = 2
+                UserDefaults.standard.set(true, forKey: "DidOpenSettingsOnce")
+            }
             closeDuplicatedWindow()
             checkLastLaunchError()
             checkTeamId()
