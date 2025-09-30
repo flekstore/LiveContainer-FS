@@ -11,39 +11,35 @@ import SwiftUI
 struct FlekstoreAppsListView: View {
     @StateObject private var viewModel = FlekstoreAppsListViewModel()
     @Binding var selectedTab: Int
-    @State private var searchText: String = ""
-    
-    // Filter apps based on search text
-    private var filteredApps: [FSAppModel] {
-        if searchText.isEmpty {
-            return viewModel.apps
-        } else {
-            return viewModel.apps.filter { $0.app_name.localizedCaseInsensitiveContains(searchText) }
-        }
-    }
     
     var body: some View {
         NavigationView {
-            Group {
-                if viewModel.isLoading {
-                    ProgressView("Loading apps…")
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                } else if let error = viewModel.errorMessage {
-                    VStack {
-                        Text(error)
-                            .foregroundColor(.red)
-                            .padding()
-                        Button("Retry") {
-                            Task { await viewModel.fetchApps() }
+            VStack {
+                // Search field
+                TextField("Search apps", text: $viewModel.searchQuery)
+                    .textFieldStyle(.roundedBorder)
+                    .padding(.horizontal)
+                
+                Group {
+                    if viewModel.isLoading {
+                        ProgressView("Loading apps…")
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    } else if let error = viewModel.errorMessage {
+                        VStack {
+                            Text(error)
+                                .foregroundColor(.red)
+                                .padding()
+                            Button("Retry") {
+                                Task { await viewModel.fetchApps() }
+                            }
                         }
+                    } else {
+                        List(viewModel.apps) { app in
+                            AppRow(app: app, selectedTab: $selectedTab)
+                                .buttonStyle(BorderlessButtonStyle())
+                        }
+                        .listStyle(.plain)
                     }
-                } else {
-                    List(filteredApps) { app in
-                        AppRow(app: app, selectedTab: $selectedTab)
-                            .buttonStyle(BorderlessButtonStyle())
-                    }
-                    .listStyle(.plain)
-                    .searchable(text: $searchText, prompt: "Search apps")
                 }
             }
             .navigationTitle("Updates")

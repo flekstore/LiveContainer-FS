@@ -7,17 +7,31 @@
 
 import SwiftUI
 
+// MARK: - ViewModel
 @MainActor
 class FlekstoreAppsListViewModel: ObservableObject {
     @Published var apps: [FSAppModel] = []
     @Published var isLoading = false
     @Published var errorMessage: String? = nil
-    @Published var searchQuery: String = ""
+    @Published var searchQuery: String = "" {
+        didSet {
+            Task {
+                await fetchApps()
+            }
+        }
+    }
     
-    private let urlString = "https://nestapitest.flekstore.com/app/with-link?page=0&search=false&filter=updates"
+    private let baseURLString = "https://nestapitest.flekstore.com/app/with-link?page=0&filter=updates"
     
     func fetchApps() async {
-        guard let url = URL(string: urlString) else { return }
+        // Build URL with search query
+        let searchPart = searchQuery.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+        let urlStr = "\(baseURLString)&search=\(searchPart)"
+        
+        guard let url = URL(string: urlStr) else {
+            errorMessage = "Invalid URL"
+            return
+        }
         
         isLoading = true
         errorMessage = nil
@@ -31,15 +45,5 @@ class FlekstoreAppsListViewModel: ObservableObject {
         }
         
         isLoading = false
-    }
-    
-    var filteredApps: [FSAppModel] {
-        if searchQuery.isEmpty {
-            return apps
-        }
-        return apps.filter { app in
-            app.app_name.localizedCaseInsensitiveContains(searchQuery) ||
-            app.app_short_description.localizedCaseInsensitiveContains(searchQuery)
-        }
     }
 }
