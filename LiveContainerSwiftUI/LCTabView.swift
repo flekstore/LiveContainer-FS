@@ -27,9 +27,9 @@ struct LCTabView: View {
 
         TabView(selection: $selectedTab) {
             FlekstoreAppsListView(selectedTab: $selectedTab)
-                .tabItem { Label("Flekstore", systemImage: "app.background.dotted") }
+                .tabItem { Label("Flekstore", systemImage: "square.stack") }
                 .tag(0)
-
+            
             appListView
                 .tabItem { Label("lc.tabView.apps".loc, systemImage: "square.stack.3d.up.fill") }
                 .tag(1)

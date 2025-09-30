@@ -13,18 +13,18 @@ class FlekstoreAppsListViewModel: ObservableObject {
     @Published var apps: [FSAppModel] = []
     @Published var isLoading = false
     @Published var errorMessage: String? = nil
-    
-     
+    @AppStorage("isAdult") private var isAdult: Bool = false
+
     @Published var searchQuery: String = ""
      
-    @Published var categories: [FSCategory] = [
+    @Published var allCategories: [FSCategory] = [
         .init(id: "32", name: " Arcade"),
         .init(id: "15", name: "Social media"),
         .init(id: "31", name: "Games"),
         .init(id: "1", name: "Emulators"),
         .init(id: "7", name: "Music"),
         .init(id: "30", name: "Photo & Video"),
-        //.init(id: "3", name: "Adult"),
+        .init(id: "3", name: "Adult"),
         .init(id: "16", name: "Movies"),
         .init(id: "23", name: "Tools"),
         .init(id: "42", name: "AI tools"),
@@ -32,6 +32,15 @@ class FlekstoreAppsListViewModel: ObservableObject {
         .init(id: "45", name: "Sport")
     ]
     
+    var categories: [FSCategory] {
+            // Filter out "Adult" if user is not adult
+            allCategories.filter { category in
+                if category.id == "3" {
+                    return isAdult
+                }
+                return true
+            }
+        }
     // Selected category — `nil` meaning "All / updates"
     @Published var selectedCategoryID: String? = nil
     

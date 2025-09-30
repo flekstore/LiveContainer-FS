@@ -189,6 +189,15 @@ struct LCSettingsView: View {
                     Text("lc.settings.JitDesc".loc)
                 }
                 
+                
+                Section{
+                    AgeConfirmationView()
+                } header: {
+                    Text("Sensitive Content")
+                } footer: {
+                    Text("Enabling this option will grant access to applications with strict age restrictions and the \"Adult\" category.")
+                }
+
                 Section{
                     Toggle(isOn: $dynamicColors) {
                         Text("lc.settings.dynamicColors".loc)
