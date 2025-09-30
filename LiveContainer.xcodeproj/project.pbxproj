@@ -146,6 +146,15 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		074A45B92E8B3AE800263918 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				FlekStore/Models/FSAppModel.swift,
+				FlekStore/Screens/Apps/FlekstoreAppsListView.swift,
+				FlekStore/Screens/Apps/FlekstoreAppsListViewModel.swift,
+			);
+			target = 17DCE99C2C7067EC00731D42 /* LiveContainer */;
+		};
 		172CA8BD2D9D74B700CF6989 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -255,7 +264,7 @@
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		172CA8992D9D72C300CF6989 /* Resources */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (172CA8BD2D9D74B700CF6989 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, 172CA8C32D9D76AD00CF6989 /* PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Resources; sourceTree = "<group>"; };
 		173545A92E2C7913001B3B4C /* SideStore */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (173546D32E2C82AE001B3B4C /* PBXFileSystemSynchronizedBuildFileExceptionSet */, 176614FC2E2C851800B1F478 /* PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet */, 173546D42E2C82AE001B3B4C /* PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = SideStore; sourceTree = "<group>"; };
-		17413FB62D9C0BAE00F3F928 /* LiveContainerSwiftUI */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = LiveContainerSwiftUI; sourceTree = "<group>"; };
+		17413FB62D9C0BAE00F3F928 /* LiveContainerSwiftUI */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (074A45B92E8B3AE800263918 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = LiveContainerSwiftUI; sourceTree = "<group>"; };
 		174140162D9C0C1B00F3F928 /* TweakLoader */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (174140F52D9C1C9B00F3F928 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, 174140F62D9C1C9B00F3F928 /* PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = TweakLoader; sourceTree = "<group>"; };
 		174140552D9C0D6D00F3F928 /* ZSign */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = ZSign; sourceTree = "<group>"; };
 		174140AE2D9C0F4100F3F928 /* TestJITLess */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = TestJITLess; sourceTree = "<group>"; };
@@ -654,6 +663,7 @@
 					};
 					17DCE99C2C7067EC00731D42 = {
 						CreatedOnToolsVersion = 15.4;
+						LastSwiftMigration = 2600;
 					};
 					E1292AE42DCA3A660065E12D = {
 						CreatedOnToolsVersion = 16.3;
@@ -1335,6 +1345,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGNING_ALLOWED = YES;
 				CODE_SIGN_ENTITLEMENTS = entitlements.xml;
 				CODE_SIGN_IDENTITY = "$(inherited)";
@@ -1367,6 +1378,7 @@
 				PRODUCT_NAME = LiveContainer;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1380,6 +1392,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGNING_ALLOWED = YES;
 				CODE_SIGN_ENTITLEMENTS = entitlements.xml;
 				CODE_SIGN_IDENTITY = "Apple Development";

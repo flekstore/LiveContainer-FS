@@ -28,6 +28,9 @@ struct LCTabView: View {
             let appListView = LCAppListView(appDataFolderNames: $appDataFolderNames, tweakFolderNames: $tweakFolderNames)
             if #available(iOS 19.0, *), SharedModel.isLiquidGlassSearchEnabled {
                 TabView {
+                    Tab("Flekstore", systemImage: "app.background.dotted") {
+                                    FlekstoreAppsListView()
+                                }
                     Tab("lc.tabView.apps".loc, systemImage: "square.stack.3d.up.fill") {
                         appListView
                     }
@@ -46,24 +49,30 @@ struct LCTabView: View {
                 }
             } else {
                 TabView {
+                    FlekstoreAppsListView()
+                            .tabItem {
+                                Label("Flekstore", systemImage: "arrow.down.circle")
+                            }
+                            .tag(0)
+                    
                     appListView
                         .tabItem {
                             Label("lc.tabView.apps".loc, systemImage: "square.stack.3d.up.fill")
                         }
-                        .tag(0)
+                        .tag(1)
                     if DataManager.shared.model.multiLCStatus != 2 {
                         LCTweaksView(tweakFolders: $tweakFolderNames)
                             .tabItem{
                                 Label("lc.tabView.tweaks".loc, systemImage: "wrench.and.screwdriver")
                             }
-                            .tag(1)
+                            .tag(2)
                     }
                     
                     LCSettingsView(appDataFolderNames: $appDataFolderNames)
                         .tabItem {
                             Label("lc.tabView.settings".loc, systemImage: "gearshape.fill")
                         }
-                        .tag(2)
+                        .tag(3)
                 }
             }
         }

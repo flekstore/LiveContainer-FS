@@ -70,6 +70,8 @@ class SharedModel: ObservableObject {
     @Published var apps : [LCAppModel] = []
     @Published var hiddenApps : [LCAppModel] = []
     
+    @Published var urlToInstall: String?
+    
     static let isPhone: Bool = {
         UIDevice.current.userInterfaceIdiom == .phone
     }()

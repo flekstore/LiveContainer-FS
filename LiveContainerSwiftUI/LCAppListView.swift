@@ -296,6 +296,12 @@ struct LCAppListView : View, LCAppBannerDelegate, LCAppModelDelegate {
             }
         }
         .navigationViewStyle(StackNavigationViewStyle())
+        .task(id: sharedModel.urlToInstall) {
+            if let installURL = sharedModel.urlToInstall {
+                await installFromUrl(urlStr: installURL)
+                sharedModel.urlToInstall = nil
+            }
+        }
         .alert("lc.common.error".loc, isPresented: $errorShow){
             Button("lc.common.ok".loc, action: {
             })
