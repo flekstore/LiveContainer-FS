@@ -32,7 +32,7 @@ jobs:
           team-id: ${{ secrets.TEAM_ID }}
 
       - name: Upload IPA
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: LiveContainer-IPA
           path: output.ipa
