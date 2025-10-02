@@ -2,9 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <!-- method can be: development, ad-hoc, enterprise, app-store -->
     <key>method</key>
-    <string>ad-hoc</string>
+    <string>release-testing</string>
 
     <!-- disable bitcode compilation -->
     <key>compileBitcode</key>
@@ -12,7 +11,11 @@
 
     <!-- manual signing style -->
     <key>signingStyle</key>
-    <string>manual</string>
+    <string>automatic</string>
+
+    <key>teamID</key>
+    <string>THS5M4V5GL</string>
+
 
     <!-- strip Swift symbols -->
     <key>stripSwiftSymbols</key>
