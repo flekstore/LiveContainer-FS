@@ -21,8 +21,7 @@ jobs:
       - name: Build and export IPA
         uses: yukiarrr/ios-build-action@v1.4.0
         with:
-          project-path: ios/LiveContainer.xcodeproj
-          workspace-path: ios/LiveContainer.xcworkspace
+          project-path: LiveContainer.xcodeproj
           scheme: LiveContainer
           export-method: ad-hoc
           configuration: Release
