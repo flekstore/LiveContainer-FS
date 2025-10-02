@@ -27,6 +27,7 @@ jobs:
           configuration: Release
           output-path: artifacts/output.ipa
           p12-base64: ${{ secrets.P12_BASE64 }}
+          certificate-password: ""
           mobileprovision-base64: ${{ secrets.MOBILEPROVISION_BASE64 }}
           code-signing-identity: ${{ secrets.CODE_SIGNING_IDENTITY }}
           team-id: ${{ secrets.TEAM_ID }}
