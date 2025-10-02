@@ -1,0 +1,35 @@
+name: Build iOS App
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: '16.4'
+
+      - name: Build and export IPA
+        uses: yukiarrr/ios-build-action@v1.4.0
+        with:
+          project-path: ios/LiveContainer.xcodeproj
+          workspace-path: ios/LiveContainer.xcworkspace
+          scheme: LiveContainer
+          export-method: ad-hoc
+          configuration: Release
+          output-path: artifacts/output.ipa
+          p12-base64: ${{ secrets.IOS_P12_BASE64 }}
+          certificate-password: ${{ secrets.IOS_CERTIFICATE_PASSWORD }}
+          mobileprovision-base64: ${{ secrets.IOS_MOBILE_PROVISION_BASE64 }}
+          team-id: ${{ secrets.IOS_TEAM_ID }}
