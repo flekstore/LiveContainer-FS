@@ -37,7 +37,7 @@ jobs:
         run: |
           xcodebuild -exportArchive \
             -archivePath $PWD/build/LiveContainer.xcarchive \
-            -exportOptionsPlist ExportOptions.plist \
+            -exportOptionsPlist .github/workflows/ExportOptions.plist \
             -exportPath $PWD/build \
             CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO \
           | xcpretty
