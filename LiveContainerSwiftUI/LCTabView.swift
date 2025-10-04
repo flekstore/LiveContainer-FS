@@ -52,10 +52,10 @@ struct LCTabView: View {
             Text(errorInfo)
         }
         .onAppear {
-//            if !UserDefaults.standard.bool(forKey: "DidOpenSettingsOnce") {
-//                selectedTab = 3 // programmatically open Settings tab
-//                UserDefaults.standard.set(true, forKey: "DidOpenSettingsOnce")
-//            }
+            if !UserDefaults.standard.bool(forKey: "DidOpenSettingsOnce") {
+                selectedTab = 3 // programmatically open Settings tab
+                UserDefaults.standard.set(true, forKey: "DidOpenSettingsOnce")
+            }
             closeDuplicatedWindow()
             checkLastLaunchError()
             checkTeamId()
@@ -166,7 +166,7 @@ struct LCTabView: View {
         
         if(bundleId != correctBundleId) {
             errorInfo = "lc.settings.bundleIdMismatch %@ %@".localizeWithFormat(bundleId, correctBundleId)
-            errorShow = true
+            //errorShow = true
         }
         UserDefaults.standard.set(true, forKey: "LCBundleIdChecked")
     }

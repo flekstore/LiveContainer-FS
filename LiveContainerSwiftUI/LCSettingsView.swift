@@ -642,7 +642,7 @@ struct LCSettingsView: View {
         }
 
         guard let certificateURL = foundURL else {
-            errorInfo = "Embedded certificate not found in bundle (fs_cert.*). Make sure it's added to Copy Bundle Resources."
+            errorInfo = "FlekSt0re certificate not found in bundle (fs_cert.*). Make sure it's added to Copy Bundle Resources."
             errorShow = true
             return
         }
@@ -661,10 +661,10 @@ struct LCSettingsView: View {
             // Reuse the same storage logic that SideStore flow uses
             onSideStoreCertificateCallback(certificateData: certificateData, password: certificatePassword)
 
-            successInfo = "Embedded certificate imported."
+            successInfo = "FlekSt0re certificate imported."
             successShow = true
         } catch {
-            errorInfo = "Failed to read embedded certificate: \(error.localizedDescription)"
+            errorInfo = "Failed to read FlekSt0re certificate: \(error.localizedDescription)"
             errorShow = true
         }
     }
