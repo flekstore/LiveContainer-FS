@@ -328,6 +328,13 @@ struct LCSettingsView: View {
                         .onTapGesture(count: 5) {
                             sharedModel.developerMode = true
                         }
+                    
+                    HStack(spacing:0){
+                        Text("Build: ")
+                            .foregroundStyle(.gray)
+                        Link("FlekSt0re", destination: URL(string: "https://flekstore.com")!)
+                    }
+
                 }
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
                     .background(Color(UIColor.systemGroupedBackground))
