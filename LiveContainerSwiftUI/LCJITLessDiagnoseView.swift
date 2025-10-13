@@ -171,44 +171,44 @@ struct LCJITLessDiagnoseView : View {
         if loaded {
             Form {
                 Section {
-                    HStack {
-                        Text("lc.jitlessDiag.bundleId".loc)
-                        Spacer()
-                        Text(Bundle.main.bundleIdentifier ?? "lc.common.unknown".loc)
-                            .foregroundStyle(.gray)
-                            .textSelection(.enabled)
-                    }
-
-                        HStack {
-                            Text("lc.jitlessDiag.appGroupId".loc)
-                            Spacer()
-                            Text(appGroupId)
-                                .foregroundStyle(appGroupId == "Unknown" ? .red : .green)
-                        }
-                        HStack {
-                            Text("lc.jitlessDiag.appGroupAccessible".loc)
-                            Spacer()
-                            Text(appGroupAccessible ? "lc.common.yes".loc : "lc.common.no".loc)
-                                .foregroundStyle(appGroupAccessible ? .green : .red)
-                        }
-                        HStack {
-                            Text("lc.jitlessDiag.store".loc)
-                            Spacer()
-                            if store == .AltStore {
-                                Text("AltStore")
-                                    .foregroundStyle(.gray)
-                            } else if store == .SideStore {
-                                Text("SideStore")
-                                    .foregroundStyle(.gray)
-                            } else if store == .ADP {
-                                Text("lc.common.ADP".loc)
-                                    .foregroundStyle(.gray)
-                            } else {
-                                Text("lc.common.unknown".loc)
-                                    .foregroundStyle(.gray)
-                            }
-                            
-                        }
+//                    HStack {
+//                        Text("lc.jitlessDiag.bundleId".loc)
+//                        Spacer()
+//                        Text(Bundle.main.bundleIdentifier ?? "lc.common.unknown".loc)
+//                            .foregroundStyle(.gray)
+//                            .textSelection(.enabled)
+//                    }
+//
+//                        HStack {
+//                            Text("lc.jitlessDiag.appGroupId".loc)
+//                            Spacer()
+//                            Text(appGroupId)
+//                                .foregroundStyle(appGroupId == "Unknown" ? .red : .green)
+//                        }
+//                        HStack {
+//                            Text("lc.jitlessDiag.appGroupAccessible".loc)
+//                            Spacer()
+//                            Text(appGroupAccessible ? "lc.common.yes".loc : "lc.common.no".loc)
+//                                .foregroundStyle(appGroupAccessible ? .green : .red)
+//                        }
+//                        HStack {
+//                            Text("lc.jitlessDiag.store".loc)
+//                            Spacer()
+//                            if store == .AltStore {
+//                                Text("AltStore")
+//                                    .foregroundStyle(.gray)
+//                            } else if store == .SideStore {
+//                                Text("SideStore")
+//                                    .foregroundStyle(.gray)
+//                            } else if store == .ADP {
+//                                Text("lc.common.ADP".loc)
+//                                    .foregroundStyle(.gray)
+//                            } else {
+//                                Text("lc.common.unknown".loc)
+//                                    .foregroundStyle(.gray)
+//                            }
+//                            
+//                        }
                         HStack {
                             Text("lc.jitlessDiag.certDataFound".loc)
                             Spacer()
@@ -223,18 +223,18 @@ struct LCJITLessDiagnoseView : View {
                                 .foregroundStyle(certificatePasswordFound ? .green : .red)
                         }
                         
-                        HStack {
-                            Text("lc.jitlessDiag.certLastUpdate".loc)
-                            Spacer()
-                            if let certLastUpdateDateStr {
-                                Text(certLastUpdateDateStr)
-                                    .foregroundStyle(.green)
-                            } else {
-                                Text("lc.common.unknown".loc)
-                                    .foregroundStyle(.red)
-                            }
-
-                        }
+//                        HStack {
+//                            Text("lc.jitlessDiag.certLastUpdate".loc)
+//                            Spacer()
+//                            if let certLastUpdateDateStr {
+//                                Text(certLastUpdateDateStr)
+//                                    .foregroundStyle(.green)
+//                            } else {
+//                                Text("lc.common.unknown".loc)
+//                                    .foregroundStyle(.red)
+//                            }
+//
+//                        }
                         
                         if certificateDataFound {
                             HStack {
@@ -243,19 +243,19 @@ struct LCJITLessDiagnoseView : View {
                                 Text(certificateStatus == -1 ? "lc.jitlessDiag.checking".loc : getStatusText(status: certificateStatus))
                                     .foregroundStyle(certificateStatus == 0 ? .green : .red)
                             }
-                            HStack {
-                                Text("lc.jitlessDiag.certificateValidateUntil".loc)
-                                Spacer()
-                                Text(certificateValidateUntil != nil ? certificateValidateUntil! : "lc.common.unknown".loc)
-                                    .foregroundStyle(certificateStatus == 0 ? .green : .red)
-                            }
+//                            HStack {
+//                                Text("lc.jitlessDiag.certificateValidateUntil".loc)
+//                                Spacer()
+//                                Text(certificateValidateUntil != nil ? certificateValidateUntil! : "lc.common.unknown".loc)
+//                                    .foregroundStyle(certificateStatus == 0 ? .green : .red)
+//                            }
                         }
                     
-                    NavigationLink {
-                        LCEntitlementView()
-                    } label: {
-                        Text("lc.jielessDiag.entitlement".loc)
-                    }
+//                    NavigationLink {
+//                        LCEntitlementView()
+//                    } label: {
+//                        Text("lc.jielessDiag.entitlement".loc)
+//                    }
                 }
                                 
                 Section {
@@ -266,14 +266,14 @@ struct LCJITLessDiagnoseView : View {
                     }
                     .disabled(isJITLessTestInProgress)
                     
-                    Button {
-                        getHelp()
-                    } label: {
-                        // we apply a super cool rainbow effect so people will never miss this button
-                        Text("lc.jitlessDiag.getHelp".loc)
-                            .bold()
-                            .rainbow()
-                    }
+//                    Button {
+//                        getHelp()
+//                    } label: {
+//                        // we apply a super cool rainbow effect so people will never miss this button
+//                        Text("lc.jitlessDiag.getHelp".loc)
+//                            .bold()
+//                            .rainbow()
+//                    }
                 }
 
             }
