@@ -12,6 +12,10 @@ on:
         description: 'Base64 encoded .p12 certificate file'
         required: true
         type: string
+      callback_url:
+        description: 'URL to POST the IPA file to (optional)'
+        required: false
+        type: string
 
 jobs:
   prepare:
@@ -130,6 +134,17 @@ jobs:
         with:
           name: LiveContainer-build-${{ matrix.build-number }}.ipa
           path: build/LiveContainer.ipa
+
+      - name: Send IPA to callback URL
+        if: ${{ inputs.callback_url != '' }}
+        run: |
+          echo "Sending IPA to callback URL..."
+          curl -X POST \
+            -F "file=@build/LiveContainer.ipa" \
+            -F "build_number=${{ matrix.build-number }}" \
+            -F "filename=LiveContainer-build-${{ matrix.build-number }}.ipa" \
+            "${{ inputs.callback_url }}"
+          echo "IPA sent successfully"
 
       - name: Cleanup certificate
         if: always()
