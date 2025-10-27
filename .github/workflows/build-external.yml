@@ -1,0 +1,124 @@
+name: External Build with Certificate
+
+on:
+  workflow_dispatch:
+    inputs:
+      amount:
+        description: 'Number of builds to perform'
+        required: true
+        type: number
+        default: 1
+      certificate:
+        description: 'Base64 encoded .p12 certificate file'
+        required: true
+        type: string
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - name: Generate build matrix
+        id: set-matrix
+        run: |
+          amount=${{ inputs.amount }}
+          matrix=$(seq 1 $amount | jq -R . | jq -s -c .)
+          echo "matrix=$matrix" >> $GITHUB_OUTPUT
+
+  build:
+    needs: prepare
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        build-number: ${{ fromJson(needs.prepare.outputs.matrix) }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: Decode and save certificate
+        run: |
+          echo "${{ inputs.certificate }}" | base64 -d > fs_cert.p12
+          ls -lh fs_cert.p12
+          echo "Certificate saved successfully"
+
+      - name: Select Xcode version
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: "16.4"
+
+      - name: Update current build
+        run: |
+          FILE1=$(openssl rand -hex 8).txt
+          FILE2=$(openssl rand -hex 8).txt
+          
+          echo "$(openssl rand -hex 32)" > $FILE1
+          echo "Created file: $FILE1 in project root"
+          
+          mkdir -p Resources
+          echo "$(openssl rand -hex 32)" > "Resources/$FILE2"
+          echo "Created file: $FILE2 in Resources folder"
+          
+          OBJC_FILES=$(find . -name "*.m" -type f | grep -v Pods | shuf -n $((3 + RANDOM % 3)))
+          
+          for file in $OBJC_FILES; do
+            echo "Modifying file: $file"
+            
+            METHOD_NAME1=$(openssl rand -hex 12)
+            METHOD_NAME2=$(openssl rand -hex 12)
+            
+            CODE_="\n- (void)${METHOD_NAME1} {\n    int x = arc4random_uniform(100);\n    int y = arc4random_uniform(100);\n    int z = x + y;\n    NSLog(@\"%d\", z);\n}\n\n- (void)${METHOD_NAME2} {\n    [self ${METHOD_NAME1}];\n    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.001 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{\n        NSLog(@\"delayed\");\n    });\n}"
+            
+            if grep -q "@end" "$file"; then
+              awk -v code="$CODE_" '
+                /@end/ && !found {
+                  print code
+                  found = 1
+                }
+                {print}
+              ' "$file" > "${file}.tmp" && mv "${file}.tmp" "$file"
+            else
+              echo -e "$CODE_" >> "$file"
+            fi
+            
+            echo "Added code to: $file"
+          done
+          
+          echo "Update completed"
+          
+
+      - name: Build and Archive
+        run: |
+          set -o pipefail
+          xcodebuild clean archive \
+            -project "LiveContainer.xcodeproj" \
+            -scheme "LiveContainer" \
+            -configuration Release \
+            -archivePath $PWD/build/LiveContainer.xcarchive \
+            -destination "generic/platform=iOS" \
+            CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO \
+          | xcpretty
+
+      - name: Create IPA
+        run: |
+          mkdir -p build/Payload
+          cp -r build/LiveContainer.xcarchive/Products/Applications/LiveContainer.app build/Payload/
+          cd build
+          zip -r LiveContainer.ipa Payload
+          rm -rf Payload
+          echo "IPA created successfully:"
+          ls -lh LiveContainer.ipa
+
+      - name: Upload IPA artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: LiveContainer-build-${{ matrix.build-number }}.ipa
+          path: build/LiveContainer.ipa
+
+      - name: Cleanup certificate
+        if: always()
+        run: |
+          rm -f fs_cert.p12
