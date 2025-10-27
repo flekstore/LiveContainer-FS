@@ -62,16 +62,21 @@ jobs:
           echo "$(openssl rand -hex 32)" > "Resources/$FILE2"
           echo "Created file: $FILE2 in Resources folder"
           
-          # Заменяем shuf на macOS-совместимую команду
-          OBJC_FILES=$(find . -name "*.m" -type f | grep -v Pods)
+          # Find .m files that contain Objective-C classes (have @implementation)
+          OBJC_FILES=$(find . -name "*.m" -type f | grep -v Pods | while read file; do
+            if grep -q "@implementation" "$file"; then
+              echo "$file"
+            fi
+          done)
+
           COUNT=$(echo "$OBJC_FILES" | wc -l)
           SELECT_COUNT=$((3 + RANDOM % 3))
-          
+
           # Если файлов меньше чем нужно, берем все доступные
           if [ $SELECT_COUNT -gt $COUNT ]; then
             SELECT_COUNT=$COUNT
           fi
-          
+
           # Выбираем случайные файлы используя awk (доступно на macOS)
           SELECTED_FILES=$(echo "$OBJC_FILES" | awk -v count="$SELECT_COUNT" '
             BEGIN { srand() }
