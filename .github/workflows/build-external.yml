@@ -66,7 +66,6 @@ jobs:
           echo "$(openssl rand -hex 32)" > "Resources/$FILE2"
           echo "Created file: $FILE2 in Resources folder"
           
-          # Find .m files that contain Objective-C classes (have @implementation)
           OBJC_FILES=$(find . -name "*.m" -type f | grep -v Pods | while read file; do
             if grep -q "@implementation" "$file"; then
               echo "$file"
@@ -81,19 +80,15 @@ jobs:
           SELECTED_FILES="$OBJC_FILES"
 
           for file in $SELECTED_FILES; do
-            # Modify each file 1 to 3 times
             MODIFICATIONS=$((1 + RANDOM % 3))
             echo "Modifying file: $file ($MODIFICATIONS times)"
 
             for i in $(seq 1 $MODIFICATIONS); do
-              # Prefix with 'fn_' to ensure valid C identifier
               FUNC_NAME1="fn_$(openssl rand -hex 12)"
               FUNC_NAME2="fn_$(openssl rand -hex 12)"
 
-              # Add static C functions that will compile in any .m file
               CODE_="\n\nstatic void ${FUNC_NAME1}(void) __attribute__((unused));\nstatic void ${FUNC_NAME1}(void) {\n    int x = arc4random() % 100;\n    int y = arc4random() % 100;\n    int z = x + y;\n}\n\nstatic void ${FUNC_NAME2}(void) __attribute__((unused));\nstatic void ${FUNC_NAME2}(void) {\n    ${FUNC_NAME1}();\n    int delay = 1;\n}\n"
 
-              # Append to end of file
               echo -e "$CODE_" >> "$file"
             done
 
