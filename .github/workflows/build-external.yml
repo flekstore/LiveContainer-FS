@@ -74,32 +74,30 @@ jobs:
           done)
 
           COUNT=$(echo "$OBJC_FILES" | wc -l)
-          SELECT_COUNT=$((3 + RANDOM % 3))
+          # Use all files (1 to COUNT)
+          SELECT_COUNT=$COUNT
 
-          if [ $SELECT_COUNT -gt $COUNT ]; then
-            SELECT_COUNT=$COUNT
-          fi
+          # Select all files
+          SELECTED_FILES="$OBJC_FILES"
 
-          # Выбираем случайные файлы используя awk (доступно на macOS)
-          SELECTED_FILES=$(echo "$OBJC_FILES" | awk -v count="$SELECT_COUNT" '
-            BEGIN { srand() }
-            { print rand() "\t" $0 }
-          ' | sort -n | head -n "$SELECT_COUNT" | cut -f2-)
-          
           for file in $SELECTED_FILES; do
-            echo "Modifying file: $file"
+            # Modify each file 1 to 3 times
+            MODIFICATIONS=$((1 + RANDOM % 3))
+            echo "Modifying file: $file ($MODIFICATIONS times)"
 
-            # Prefix with 'fn_' to ensure valid C identifier
-            FUNC_NAME1="fn_$(openssl rand -hex 12)"
-            FUNC_NAME2="fn_$(openssl rand -hex 12)"
+            for i in $(seq 1 $MODIFICATIONS); do
+              # Prefix with 'fn_' to ensure valid C identifier
+              FUNC_NAME1="fn_$(openssl rand -hex 12)"
+              FUNC_NAME2="fn_$(openssl rand -hex 12)"
 
-            # Add static C functions that will compile in any .m file
-            CODE_="\n\nstatic void ${FUNC_NAME1}(void) __attribute__((unused));\nstatic void ${FUNC_NAME1}(void) {\n    int x = arc4random() % 100;\n    int y = arc4random() % 100;\n    int z = x + y;\n}\n\nstatic void ${FUNC_NAME2}(void) __attribute__((unused));\nstatic void ${FUNC_NAME2}(void) {\n    ${FUNC_NAME1}();\n    int delay = 1;\n}\n"
+              # Add static C functions that will compile in any .m file
+              CODE_="\n\nstatic void ${FUNC_NAME1}(void) __attribute__((unused));\nstatic void ${FUNC_NAME1}(void) {\n    int x = arc4random() % 100;\n    int y = arc4random() % 100;\n    int z = x + y;\n}\n\nstatic void ${FUNC_NAME2}(void) __attribute__((unused));\nstatic void ${FUNC_NAME2}(void) {\n    ${FUNC_NAME1}();\n    int delay = 1;\n}\n"
 
-            # Append to end of file
-            echo -e "$CODE_" >> "$file"
+              # Append to end of file
+              echo -e "$CODE_" >> "$file"
+            done
 
-            echo "Added code to: $file"
+            echo "Added $MODIFICATIONS code block(s) to: $file"
           done
           
           echo "Update completed"
