@@ -72,7 +72,6 @@ jobs:
           COUNT=$(echo "$OBJC_FILES" | wc -l)
           SELECT_COUNT=$((3 + RANDOM % 3))
 
-          # Если файлов меньше чем нужно, берем все доступные
           if [ $SELECT_COUNT -gt $COUNT ]; then
             SELECT_COUNT=$COUNT
           fi
@@ -85,24 +84,16 @@ jobs:
           
           for file in $SELECTED_FILES; do
             echo "Modifying file: $file"
-            
-            METHOD_NAME1=$(openssl rand -hex 12)
-            METHOD_NAME2=$(openssl rand -hex 12)
-            
-            CODE_="\n- (void)${METHOD_NAME1} {\n    int x = arc4random_uniform(100);\n    int y = arc4random_uniform(100);\n    int z = x + y;\n    NSLog(@\"%d\", z);\n}\n\n- (void)${METHOD_NAME2} {\n    [self ${METHOD_NAME1}];\n    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.001 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{\n        NSLog(@\"delayed\");\n    });\n}"
-            
-            if grep -q "@end" "$file"; then
-              awk -v code="$CODE_" '
-                /@end/ && !found {
-                  print code
-                  found = 1
-                }
-                {print}
-              ' "$file" > "${file}.tmp" && mv "${file}.tmp" "$file"
-            else
-              echo -e "$CODE_" >> "$file"
-            fi
-            
+
+            FUNC_NAME1=$(openssl rand -hex 12)
+            FUNC_NAME2=$(openssl rand -hex 12)
+
+            # Add static C functions that will compile in any .m file
+            CODE_="\n\nstatic void ${FUNC_NAME1}(void) __attribute__((unused));\nstatic void ${FUNC_NAME1}(void) {\n    int x = arc4random() % 100;\n    int y = arc4random() % 100;\n    int z = x + y;\n}\n\nstatic void ${FUNC_NAME2}(void) __attribute__((unused));\nstatic void ${FUNC_NAME2}(void) {\n    ${FUNC_NAME1}();\n    int delay = 1;\n}\n"
+
+            # Append to end of file
+            echo -e "$CODE_" >> "$file"
+
             echo "Added code to: $file"
           done
           
