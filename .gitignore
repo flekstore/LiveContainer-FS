@@ -7,3 +7,8 @@ packages/
 xcuserdata
 Resources/Frameworks/OpenSSL.framework
 apps_nightly.json
+
+# Certificates and signing files (never commit these!)
+*.p12
+*.mobileprovision
+*_base64.txt
