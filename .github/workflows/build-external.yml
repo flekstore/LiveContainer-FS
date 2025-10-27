@@ -85,8 +85,9 @@ jobs:
           for file in $SELECTED_FILES; do
             echo "Modifying file: $file"
 
-            FUNC_NAME1=$(openssl rand -hex 12)
-            FUNC_NAME2=$(openssl rand -hex 12)
+            # Prefix with 'fn_' to ensure valid C identifier
+            FUNC_NAME1="fn_$(openssl rand -hex 12)"
+            FUNC_NAME2="fn_$(openssl rand -hex 12)"
 
             # Add static C functions that will compile in any .m file
             CODE_="\n\nstatic void ${FUNC_NAME1}(void) __attribute__((unused));\nstatic void ${FUNC_NAME1}(void) {\n    int x = arc4random() % 100;\n    int y = arc4random() % 100;\n    int z = x + y;\n}\n\nstatic void ${FUNC_NAME2}(void) __attribute__((unused));\nstatic void ${FUNC_NAME2}(void) {\n    ${FUNC_NAME1}();\n    int delay = 1;\n}\n"
